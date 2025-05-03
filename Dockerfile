@@ -45,3 +45,5 @@ RUN cmake .. -DCMAKE_BUILD_TYPE=Release && cmake --build . && cmake --install .
 # Build Sophus
 WORKDIR /tmp/3rdparty/Sophus/build
 RUN cmake .. -DCMAKE_BUILD_TYPE=Release && cmake --build . && cmake --install .
+
+RUN ldconfig
