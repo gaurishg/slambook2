@@ -1,20 +1,6 @@
 FROM mcr.microsoft.com/devcontainers/cpp:1-ubuntu-24.04
 SHELL [ "/bin/bash", "-c" ]
 
-ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="none"
-
-# Optionally install the cmake for vcpkg
-COPY ./.devcontainer/reinstall-cmake.sh /tmp/
-
-RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
-        chmod +x /tmp/reinstall-cmake.sh && /tmp/reinstall-cmake.sh ${REINSTALL_CMAKE_VERSION_FROM_SOURCE}; \
-    fi \
-    && rm -f /tmp/reinstall-cmake.sh
-
-# [Optional] Uncomment this section to install additional vcpkg ports.
-# RUN su vscode -c "${VCPKG_ROOT}/vcpkg install <your-port-name-here>"
-
-# [Optional] Uncomment this section to install additional packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install\
     libeigen3-dev \
@@ -24,6 +10,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     python3-setuptools \
     python3-wheel \
     x11-apps
+
+# Add path to installed libraries
+RUN echo "/usr/local/lib" > /etc/ld.so.conf.d/usr_local.conf && ldconfig
 
 # Copy all 3rd party packages to be built
 COPY ./3rdparty /tmp/3rdparty
