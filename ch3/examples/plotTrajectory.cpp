@@ -3,16 +3,19 @@
 #include <Eigen/Geometry>
 #include <unistd.h>
 #include <format>
+#include <filesystem>
 
 using namespace Eigen;
 using namespace std;
 
 // path to trajectory file
-string trajectory_file = "./examples/trajectory.txt";
+// string trajectory_file = "./examples/trajectory.txt";
 
 void DrawTrajectory(vector<Isometry3d, Eigen::aligned_allocator<Isometry3d>>);
 
 int main(int argc, char **argv) {
+    const auto exe_path = std::filesystem::path(argv[0]);
+    const auto trajectory_file = exe_path.parent_path() / "trajectory.txt";
     vector<Isometry3d, Eigen::aligned_allocator<Isometry3d>> poses;
     ifstream fin(trajectory_file);
     if (!fin) {
@@ -36,7 +39,6 @@ int main(int argc, char **argv) {
 
 void DrawTrajectory(vector<Isometry3d, Eigen::aligned_allocator<Isometry3d>> poses) {
     // create pangolin window and plot the trajectory
-    std::cout << std::format("trajectory_file: {}", trajectory_file.c_str()) << std::endl;
     pangolin::CreateWindowAndBind("Trajectory Viewer", 1024, 768);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
