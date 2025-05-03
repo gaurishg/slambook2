@@ -1,6 +1,8 @@
 #include <pangolin/pangolin.h>
 #include <Eigen/Core>
+#include <Eigen/Geometry>
 #include <unistd.h>
+#include <format>
 
 using namespace Eigen;
 using namespace std;
@@ -34,6 +36,7 @@ int main(int argc, char **argv) {
 
 void DrawTrajectory(vector<Isometry3d, Eigen::aligned_allocator<Isometry3d>> poses) {
     // create pangolin window and plot the trajectory
+    std::cout << std::format("trajectory_file: {}", trajectory_file.c_str()) << std::endl;
     pangolin::CreateWindowAndBind("Trajectory Viewer", 1024, 768);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);

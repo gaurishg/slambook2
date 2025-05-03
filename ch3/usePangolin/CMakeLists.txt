@@ -1,0 +1,2 @@
+add_executable(pangolin_example1 example1.cpp)
+target_link_libraries(pangolin_example1 ${Pangolin_LIBRARIES})
