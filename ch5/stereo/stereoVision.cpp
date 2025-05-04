@@ -1,5 +1,7 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <filesystem>
+#include <format>
 #include <string>
 #include <Eigen/Core>
 #include <pangolin/pangolin.h>
@@ -8,15 +10,14 @@
 using namespace std;
 using namespace Eigen;
 
-// 文件路径
-string left_file = "./left.png";
-string right_file = "./right.png";
-
 // 在pangolin中画图，已写好，无需调整
 void showPointCloud(
     const vector<Vector4d, Eigen::aligned_allocator<Vector4d>> &pointcloud);
 
 int main(int argc, char **argv) {
+    const auto folder_path = std::filesystem::path(argv[0]).parent_path();
+    const auto left_file = (folder_path / "left.png").string();
+    const auto right_file = (folder_path / "right.png").string();
 
     // 内参
     double fx = 718.856, fy = 718.856, cx = 607.1928, cy = 185.2157;
@@ -24,8 +25,8 @@ int main(int argc, char **argv) {
     double b = 0.573;
 
     // 读取图像
-    cv::Mat left = cv::imread(left_file, 0);
-    cv::Mat right = cv::imread(right_file, 0);
+    cv::Mat left = cv::imread(left_file, cv::IMREAD_GRAYSCALE);
+    cv::Mat right = cv::imread(right_file, cv::IMREAD_GRAYSCALE);
     cv::Ptr<cv::StereoSGBM> sgbm = cv::StereoSGBM::create(
         0, 96, 9, 8 * 9 * 9, 32 * 9 * 9, 1, 63, 10, 100, 32);    // 神奇的参数
     cv::Mat disparity_sgbm, disparity;

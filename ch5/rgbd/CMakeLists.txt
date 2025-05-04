@@ -5,3 +5,6 @@ find_package(Pangolin REQUIRED)
 
 add_executable(joinMap joinMap.cpp)
 target_link_libraries(joinMap ${OpenCV_LIBS} ${Pangolin_LIBRARIES})
+file(COPY "color" DESTINATION ".")
+file(COPY "depth" DESTINATION ".")
+file(COPY "pose.txt" DESTINATION ".")

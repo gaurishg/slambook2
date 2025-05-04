@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <format>
+#include <filesystem>
 #include <opencv2/opencv.hpp>
 #include <boost/format.hpp>  // for formating strings
 #include <pangolin/pangolin.h>
@@ -18,16 +20,17 @@ int main(int argc, char **argv) {
     vector<cv::Mat> colorImgs, depthImgs;    // 彩色图和深度图
     TrajectoryType poses;         // 相机位姿
 
-    ifstream fin("./pose.txt");
+    const auto folder_path = std::filesystem::path(argv[0]).parent_path();
+    const auto pose_file_path = folder_path / "pose.txt";
+    ifstream fin(pose_file_path);
     if (!fin) {
         cerr << "请在有pose.txt的目录下运行此程序" << endl;
         return 1;
     }
 
     for (int i = 0; i < 5; i++) {
-        boost::format fmt("./%s/%d.%s"); //图像文件格式
-        colorImgs.push_back(cv::imread((fmt % "color" % (i + 1) % "png").str()));
-        depthImgs.push_back(cv::imread((fmt % "depth" % (i + 1) % "pgm").str(), -1)); // 使用-1读取原始图像
+        colorImgs.push_back(cv::imread(((folder_path / std::format("color/{}.png", i + 1) ).string())));
+        depthImgs.push_back(cv::imread((folder_path / std::format("depth/{}.pgm", i + 1)).string(), cv::IMREAD_UNCHANGED)); // 使用-1读取原始图像
 
         double data[7] = {0};
         for (auto &d:data)
