@@ -3,6 +3,7 @@ SHELL [ "/bin/bash", "-c" ]
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install\
+    libboost-all-dev \
     libeigen3-dev \
     libopencv*-dev \
     python3-dev \
